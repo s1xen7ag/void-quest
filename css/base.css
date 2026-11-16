@@ -1,0 +1,272 @@
+/* ============ Токени ============ */
+:root {
+  --bg-0: #07060b;
+  --stone-0: #0e0c13;
+  --stone-1: #15121c;
+  --stone-2: #1d1927;
+  --stone-3: #282236;
+  --line: rgba(200, 164, 92, 0.32);
+  --line-soft: rgba(200, 164, 92, 0.16);
+  --gold: #c8a45c;
+  --gold-hi: #f1d18e;
+  --gold-text: #e3c27c;
+  --violet: #8a4dff;
+  --violet-hi: #b98bff;
+  --violet-deep: #3a1c73;
+  --green: #48c254;
+  --green-hi: #8dff7a;
+  --red: #d23b3b;
+  --text: #ddd6ea;
+  --text-dim: #a59cba;
+  --text-mute: #6f6884;
+
+  --r-common: #b0c3d9;
+  --r-uncommon: #5e98d9;
+  --r-rare: #4b69ff;
+  --r-mythical: #8847ff;
+  --r-legendary: #d32ce6;
+  --r-immortal: #e4ae39;
+  --r-arcana: #ade55c;
+
+  --rarity: var(--r-common);           /* за замовчуванням; клас .rarity-* перекриває */
+  --font-title: 'Cormorant SC', 'Times New Roman', serif;
+  --font-ui: 'Cormorant SC', 'Times New Roman', serif;   /* один шрифт на весь сайт — як у верхній панелі */
+  --topbar-h: 64px;
+  --ease-out: cubic-bezier(.16, .84, .3, 1);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.45;
+  background: var(--bg-0) url('../assets/img/bg.jpg') center / cover fixed no-repeat;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+body::before { /* віньєтка */
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(4, 2, 10, 0.55) 70%, rgba(2, 1, 6, 0.92) 100%),
+    linear-gradient(180deg, rgba(5, 3, 10, 0.35), rgba(5, 3, 10, 0.15) 30%, rgba(5, 3, 10, 0.6));
+  pointer-events: none;
+  z-index: 0;
+}
+#fx { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#app { position: relative; z-index: 2; height: 100%; }
+img { -webkit-user-drag: none; }
+button { font: inherit; color: inherit; }
+input { font: inherit; user-select: text; }
+
+/* ============ Типографіка ============ */
+.h-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold-text);
+  background: linear-gradient(180deg, #fbe7b4 0%, #d8b46c 55%, #a8803f 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+  margin: 0;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.h-sub {
+  font-family: var(--font-title);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-size: 15px;
+  margin: 4px 0 0;
+}
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--gold);
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+}
+.gold { color: var(--gold-text); }
+
+/* ============ Панель ============ */
+.panel {
+  position: relative;
+  border: 22px solid transparent;
+  border-image: url('../assets/ui/panel.png') 48 fill / 22px stretch;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.7));
+}
+.panel--plain { /* легша панель для дрібних блоків */
+  background: linear-gradient(180deg, rgba(29, 25, 39, 0.92), rgba(14, 12, 19, 0.94));
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.06), 0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* ============ Кнопки ============ */
+.btn {
+  --h: 52px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: var(--h);
+  padding: 0 34px;
+  border: 14px solid transparent;
+  border-image-slice: 46 70 fill;
+  border-image-width: 14px 20px;
+  border-image-repeat: stretch;
+  background: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: filter 0.18s, transform 0.12s;
+  white-space: nowrap;
+}
+.btn > * { pointer-events: none; }
+.btn:hover { filter: brightness(1.18) drop-shadow(0 0 14px rgba(241, 209, 142, 0.35)); }
+.btn:active { transform: translateY(1px) scale(0.99); }
+.btn[disabled], .btn.is-busy { filter: grayscale(0.6) brightness(0.7); cursor: default; pointer-events: none; }
+.btn--gold  { border-image-source: url('../assets/ui/btn-gold.png');  color: #fffaf0; text-shadow: 0 1px 2px #4a3000, 0 0 8px rgba(40, 24, 0, 0.75); }
+.btn--green { border-image-source: url('../assets/ui/btn-green.png'); color: #f2ffe9; text-shadow: 0 1px 3px rgba(0, 40, 0, 0.9); }
+.btn--dark  { border-image-source: url('../assets/ui/btn-dark.png');  color: var(--text); text-shadow: 0 1px 2px #000; }
+.btn--red   { border-image-source: url('../assets/ui/btn-red.png');   color: #ffecec; text-shadow: 0 1px 2px #300; }
+.btn--sm { --h: 40px; font-size: 16px; padding: 0 20px; border-width: 10px; border-image-width: 10px 14px; }
+.btn--lg { --h: 64px; font-size: 28px; padding: 0 56px; }
+
+.btn-round {
+  width: 150px; height: 150px;
+  border: 0; border-radius: 50%;
+  background: url('../assets/ui/btn-round.png') center / contain no-repeat;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  font-family: var(--font-title); font-weight: 700; font-size: 22px; letter-spacing: 0.1em;
+  color: #3a2608; text-shadow: 0 1px 0 rgba(255, 236, 180, 0.6);
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.08s;
+}
+.btn-round:hover { filter: brightness(1.15) drop-shadow(0 0 22px rgba(241, 209, 142, 0.45)); }
+.btn-round:active { transform: scale(0.95); }
+
+/* Варіант-кнопка (відповіді) */
+.opt {
+  min-height: 48px; padding: 10px 18px;
+  background: linear-gradient(180deg, rgba(40, 34, 54, 0.95), rgba(18, 15, 25, 0.95));
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.06);
+  font-family: var(--font-title); font-weight: 700; font-size: 18px; letter-spacing: 0.08em;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, color 0.15s;
+}
+.opt:hover { border-color: var(--gold); color: var(--gold-hi); box-shadow: 0 0 14px rgba(200, 164, 92, 0.25), inset 0 1px 0 rgba(255, 240, 200, 0.1); }
+.opt.is-correct { border-color: var(--green); color: #eaffea; background: linear-gradient(180deg, #1f5a26, #10331a); box-shadow: 0 0 18px rgba(72, 194, 84, 0.5); }
+.opt.is-wrong { border-color: var(--red); color: #ffe5e5; background: linear-gradient(180deg, #5e1c1c, #2e0d0d); box-shadow: 0 0 18px rgba(210, 59, 59, 0.45); }
+.opt.is-selected { border-color: #4fa3ff; box-shadow: 0 0 16px rgba(79, 163, 255, 0.5); }
+
+/* Поле вводу */
+.field {
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  background: rgba(6, 5, 10, 0.75);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 18px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field::placeholder { color: var(--text-mute); }
+.field:focus { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(200, 164, 92, 0.35), 0 0 18px rgba(200, 164, 92, 0.18); }
+
+/* ============ Рамки й рідкість ============ */
+.frame-square {
+  position: relative;
+  border: 10px solid transparent;
+  border-image: url('../assets/ui/frame-square.png') 40 / 10px stretch;
+  background: #0b0910;
+}
+.rarity-common { --rarity: var(--r-common); }
+.rarity-uncommon { --rarity: var(--r-uncommon); }
+.rarity-rare { --rarity: var(--r-rare); }
+.rarity-mythical { --rarity: var(--r-mythical); }
+.rarity-legendary { --rarity: var(--r-legendary); }
+.rarity-immortal { --rarity: var(--r-immortal); }
+.rarity-arcana { --rarity: var(--r-arcana); }
+.rarity-label { color: var(--rarity); font-family: var(--font-title); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; font-size: 13px; }
+
+.img-fallback {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%; min-height: 40px;
+  padding: 6px; text-align: center;
+  font-size: 13px; color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ============ Модалка, тост, монети ============ */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(30, 12, 60, 0.55), rgba(3, 2, 8, 0.88));
+  backdrop-filter: blur(3px);
+  animation: fade-in 0.25s ease-out;
+}
+.modal {
+  width: min(560px, calc(100vw - 32px));
+  padding: 10px 18px 6px;
+  text-align: center;
+  animation: pop-in 0.35s var(--ease-out);
+}
+.modal .h-title { font-size: 34px; }
+.modal__body { margin: 16px 0 22px; color: var(--text); font-size: 18px; }
+.modal__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.toast-wrap { position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%); z-index: 60; display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; }
+.toast {
+  padding: 10px 22px;
+  background: linear-gradient(180deg, rgba(36, 30, 50, 0.97), rgba(16, 13, 22, 0.97));
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 18px rgba(138, 77, 255, 0.18);
+  font-family: var(--font-title); font-weight: 700; font-size: 18px; letter-spacing: 0.06em;
+  color: var(--gold-hi);
+  animation: toast-in 0.3s var(--ease-out);
+}
+.toast.is-out { animation: toast-out 0.3s ease-in forwards; }
+
+.coin-fly {
+  position: fixed; z-index: 70;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #f0c75e 40%, #a87420 75%, #6b4510);
+  box-shadow: 0 0 10px rgba(241, 209, 142, 0.8);
+  pointer-events: none;
+}
+
+.shake { animation: shake 0.45s; }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.92) translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(8px); } }
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+@keyframes pulse-violet {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(138, 77, 255, 0.55)); }
+  50% { filter: drop-shadow(0 0 18px rgba(185, 139, 255, 0.95)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* один шрифт (Cormorant SC) — трохи жирніший і більший, щоб дрібний текст добре читався */
+body { font-weight: 600; font-size: 17px; letter-spacing: 0.01em; }
+.field, .field::placeholder { font-family: var(--font-ui); font-weight: 600; }
